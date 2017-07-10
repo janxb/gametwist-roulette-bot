@@ -41,7 +41,10 @@ public class Main {
             s.wait("src/main/resources/app_button_quickspin.png").click();
             Thread.sleep(2000);
 
-            boolean isGameWin = (null == s.exists(new Pattern("src/main/resources/app_text_gamelost.png").exact(), 0.1));
+            // we have to use this exact pattern, because sikulix uses a default accuracy of 70%, this matches every text
+            Pattern exactGameResultPattern = new Pattern("src/main/resources/app_text_gamelost.png").exact();
+            boolean isGameWin = (null == s.exists(exactGameResultPattern, 0.1));
+
             if (isGameWin) {
                 lostCount = 0;
                 System.out.println("Game won, resetting lostCount");
@@ -51,7 +54,6 @@ public class Main {
                 if (lostCount >= maxLostCount) {
                     lostCount = 0;
                     System.out.println("maxLostCount overstepped, resetting lostCount");
-
                 }
             }
         }
